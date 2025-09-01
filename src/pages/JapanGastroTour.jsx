@@ -73,7 +73,9 @@ const Pill = ({ children }) => (
 // ---- Data (UPDATED for April 7–17, Tokyo → Kyoto → Osaka → Hakone → Tokyo) ----
 const TOUR_START = new Date(2026, 3, 7); // Day 1
 const TOUR_DAYS = 11; // Apr 7–17 inclusive
-const TOUR_END = new Date(new Date(TOUR_START).setDate(TOUR_START.getDate() + (TOUR_DAYS - 1)));
+const TOUR_END = new Date(
+  new Date(TOUR_START).setDate(TOUR_START.getDate() + (TOUR_DAYS - 1))
+);
 
 const formatDate = (d) =>
   d.toLocaleDateString(undefined, {
@@ -82,12 +84,13 @@ const formatDate = (d) =>
     day: "numeric",
   });
 
-const day = (n, city, title, blurb, meals = "Breakfast") => ({
+const day = (n, city, title, blurb, meals = "Breakfast", imageUrl = "") => ({
   n,
   city,
   title,
   blurb,
   meals,
+  imageUrl,
 });
 
 // New gastro-forward plan with 2 Michelin experiences + street-food markets
@@ -97,77 +100,88 @@ const itinerary = [
     "Tokyo",
     "Welcome to Japan",
     "Arrival, airport transfer, and welcome tasting walk in a lively neighborhood. Evening ramen stop and sake toast.",
-    "Dinner"
+    "Dinner",
+    "https://tse3.mm.bing.net/th/id/OIP.DkBX9g31Gl4qQZBH-x1R9wHaEL?pid=Api" // Tokyo Ramen Street
   ),
   day(
     2,
     "Tokyo",
     "Michelin-Star Sushi Omakase",
     "Chef's counter omakase at a Michelin-starred sushi house. Free afternoon for museums or shopping.",
-    "Breakfast, Dinner"
+    "Breakfast, Dinner",
+    "https://tse1.mm.bing.net/th/id/OIP.PQfzjY2-XPSE8Z6la-INNAHaLH?pid=Api" // Sushi counter
   ),
   day(
     3,
     "Tokyo",
     "Tsukiji Outer Market + Ramen Crawl",
     "Street-food tastings among classic stalls, then a curated ramen hop in Shinjuku.",
-    "Breakfast, Lunch"
+    "Breakfast, Lunch",
+    "https://tse1.mm.bing.net/th/id/OIP.XUPP4u7usK6e_aTh-1rgdAHaD2?pid=Api" // Tsukiji Market
   ),
   day(
     4,
     "Kyoto",
     "Shinkansen to Kyoto + Gion",
     "Bullet train to Kyoto. Stroll Gion's lanes at dusk before a refined kaiseki tasting at a Michelin-starred ryōtei.",
-    "Breakfast, Dinner"
+    "Breakfast, Dinner",
+    "https://tse3.mm.bing.net/th/id/OIP.mPcOtjQqdGTXw05nPPr1YAHaEo?pid=Api" // Gion at night
   ),
   day(
     5,
     "Kyoto",
     "Nishiki Market + Tea Ceremony",
     "Guided bites through Kyoto's kitchen, then a traditional matcha ceremony in a teahouse.",
-    "Breakfast, Lunch"
+    "Breakfast, Lunch",
+    "https://tse1.mm.bing.net/th/id/OIP.8VlLk_ZHFvtjB-Y1jvGw7wHaFj?pid=Api" // Nishiki Market
   ),
   day(
     6,
     "Osaka",
     "Dotonbori Street Feast",
     "Neon-lit canals and sizzling griddles—takoyaki, okonomiyaki, and kushikatsu along Dotonbori.",
-    "Breakfast, Dinner"
+    "Breakfast, Dinner",
+    "https://tse3.mm.bing.net/th/id/OIP.Q0N1_p7hJI20RS4-s8vEXQHaHa?pid=Api" // Dotonbori
   ),
   day(
     7,
     "Osaka",
     "Kuromon Market + Izakaya Night",
     "Seafood tastings and wagyu bites at Kuromon Market; craft beer & izakaya hop after dark.",
-    "Breakfast, Lunch"
+    "Breakfast, Lunch",
+    "https://tse2.mm.bing.net/th/id/OIP.M-TNt8VbP0kxkA5C9hM-zQHaE8?pid=Api" // Kuromon Market
   ),
   day(
     8,
     "Hakone",
     "Ryokan Onsen + Kaiseki",
     "Transfer to Hakone for hot-spring relaxation and a seasonal multi-course ryokan dinner.",
-    "Breakfast, Dinner"
+    "Breakfast, Dinner",
+    "https://tse1.mm.bing.net/th/id/OIP.8VlLk_ZHFvtjB-Y1jvGw7wHaFj?pid=Api" // Kaiseki dinner
   ),
   day(
     9,
     "Hakone",
     "Lake Ashi, Ropeway & Local Soba",
     "Views toward Fuji (weather permitting), ropeway ride, and rustic soba & tofu specialties.",
-    "Breakfast, Lunch"
+    "Breakfast, Lunch",
+    "https://tse2.mm.bing.net/th/id/OIP.9lLg6s7OhDwpMhuYPpGJAgHaE8?pid=Api" // Lake Ashi
   ),
   day(
     10,
     "Tokyo",
     "Return to Tokyo: Ginza Tastes",
     "Back to the capital for gourmet shopping—wagashi sweets, sake—and a tempura & unagi farewell feast.",
-    "Breakfast, Dinner"
+    "Breakfast, Dinner",
+    "https://tse1.mm.bing.net/th/id/OIP.PQfzjY2-XPSE8Z6la-INNAHaLH?pid=Api" // Sushi/Tempura
   ),
   day(
     11,
     "Tokyo",
     "Departure Day",
     "Free morning for last-minute treats. Airport transfer and farewell. Arigatō!",
-    "Breakfast"
+    "Breakfast",
+    "https://tse3.mm.bing.net/th/id/OIP.DkBX9g31Gl4qQZBH-x1R9wHaEL?pid=Api" // Tokyo airport ramen vibes
   ),
 ];
 
@@ -266,7 +280,9 @@ export default function JapanGastroTour() {
   );
 
   const toggleDiet = (val) =>
-    setDiet((d) => (d.includes(val) ? d.filter((x) => x !== val) : [...d, val]));
+    setDiet((d) =>
+      d.includes(val) ? d.filter((x) => x !== val) : [...d, val]
+    );
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -293,16 +309,28 @@ export default function JapanGastroTour() {
             <span>Gastro Japan 11‑Day</span>
           </a>
           <nav className="hidden gap-6 sm:flex">
-            <a href="#highlights" className="text-sm font-medium hover:text-emerald-700">
+            <a
+              href="#highlights"
+              className="text-sm font-medium hover:text-emerald-700"
+            >
               Highlights
             </a>
-            <a href="#itinerary" className="text-sm font-medium hover:text-emerald-700">
+            <a
+              href="#itinerary"
+              className="text-sm font-medium hover:text-emerald-700"
+            >
               Itinerary
             </a>
-            <a href="#inclusions" className="text-sm font-medium hover:text-emerald-700">
+            <a
+              href="#inclusions"
+              className="text-sm font-medium hover:text-emerald-700"
+            >
               What's Included
             </a>
-            <a href="#faq" className="text-sm font-medium hover:text-emerald-700">
+            <a
+              href="#faq"
+              className="text-sm font-medium hover:text-emerald-700"
+            >
               FAQ
             </a>
             <a href="#book" className="text-sm font-semibold text-emerald-700">
@@ -335,7 +363,9 @@ export default function JapanGastroTour() {
                 11‑Day Japan Gastronomy Tour
               </h1>
               <p className="mt-4 text-lg leading-8 text-white/90">
-                Spring cherry blossoms frame a food‑first route through Tokyo, Kyoto, Osaka, and Hakone—from Michelin‑starred dining to iconic street markets.
+                Spring cherry blossoms frame a food‑first route through Tokyo,
+                Kyoto, Osaka, and Hakone—from Michelin‑starred dining to iconic
+                street markets.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
@@ -389,7 +419,9 @@ export default function JapanGastroTour() {
                 <h.icon className="h-6 w-6" aria-hidden />
               </div>
               <h3 className="text-lg font-semibold">{h.title}</h3>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{h.text}</p>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                {h.text}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -415,19 +447,35 @@ export default function JapanGastroTour() {
                 transition={{ duration: 0.45 }}
                 className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-950"
               >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-3">
-                    <Pill>Day {d.n}</Pill>
-                    <Badge icon={CalendarDays}>{formatDate(date)}</Badge>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Image on the left */}
+                  <img
+                    src={d.imageUrl}
+                    alt={`${d.city} — ${d.title}`}
+                    loading="lazy"
+                    className="w-full sm:w-32 sm:h-32 rounded-lg border border-gray-200 object-cover dark:border-gray-700"
+                  />
+
+                  {/* Text content on the right */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex items-center gap-3">
+                        <Pill>Day {d.n}</Pill>
+                        <Badge icon={CalendarDays}>{formatDate(date)}</Badge>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                        <MapPin className="h-4 w-4" /> {d.city}
+                      </div>
+                    </div>
+
+                    <h3 className="mt-3 text-xl font-semibold">{d.title}</h3>
+                    <p className="mt-2 text-gray-700 dark:text-gray-200">
+                      {d.blurb}
+                    </p>
+                    <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+                      <Badge icon={UtensilsCrossed}>Meals: {d.meals}</Badge>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                    <MapPin className="h-4 w-4" /> {d.city}
-                  </div>
-                </div>
-                <h3 className="mt-3 text-xl font-semibold">{d.title}</h3>
-                <p className="mt-2 text-gray-700 dark:text-gray-200">{d.blurb}</p>
-                <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
-                  <Badge icon={UtensilsCrossed}>Meals: {d.meals}</Badge>
                 </div>
               </motion.article>
             );
@@ -504,7 +552,9 @@ export default function JapanGastroTour() {
                 <h3 className="text-base font-semibold">{f.q}</h3>
                 <Clock className="h-4 w-4 text-gray-500 transition group-open:rotate-90" />
               </summary>
-              <p className="mt-2 text-sm text-gray-700 dark:text-gray-200">{f.a}</p>
+              <p className="mt-2 text-sm text-gray-700 dark:text-gray-200">
+                {f.a}
+              </p>
             </details>
           ))}
         </div>
@@ -518,7 +568,10 @@ export default function JapanGastroTour() {
         subtitle="No payment collected here — this form sends an email inquiry. We'll reply with availability and next steps."
       >
         <div className="grid gap-8 lg:grid-cols-5">
-          <form onSubmit={onSubmit} className="lg:col-span-3 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
+          <form
+            onSubmit={onSubmit}
+            className="lg:col-span-3 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950"
+          >
             <div className="grid gap-5 sm:grid-cols-2">
               <label className="grid gap-2">
                 <span className="text-sm font-medium">Full name</span>
@@ -559,13 +612,23 @@ export default function JapanGastroTour() {
                     onChange={(e) => setSize(parseInt(e.target.value))}
                     className="w-full"
                   />
-                  <span className="w-8 text-right text-sm tabular-nums">{size}</span>
+                  <span className="w-8 text-right text-sm tabular-nums">
+                    {size}
+                  </span>
                 </div>
               </div>
               <fieldset className="sm:col-span-2">
-                <legend className="mb-2 text-sm font-medium">Dietary preferences</legend>
+                <legend className="mb-2 text-sm font-medium">
+                  Dietary preferences
+                </legend>
                 <div className="flex flex-wrap gap-2">
-                  {["Vegetarian", "Pescatarian", "No pork", "No shellfish", "Gluten‑free"].map((dopt) => (
+                  {[
+                    "Vegetarian",
+                    "Pescatarian",
+                    "No pork",
+                    "No shellfish",
+                    "Gluten‑free",
+                  ].map((dopt) => (
                     <label
                       key={dopt}
                       className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1 text-sm transition ${
@@ -574,7 +637,12 @@ export default function JapanGastroTour() {
                           : "border-gray-300 bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-900"
                       }`}
                     >
-                      <input type="checkbox" className="hidden" checked={diet.includes(dopt)} onChange={() => toggleDiet(dopt)} />
+                      <input
+                        type="checkbox"
+                        className="hidden"
+                        checked={diet.includes(dopt)}
+                        onChange={() => toggleDiet(dopt)}
+                      />
                       {dopt}
                     </label>
                   ))}
@@ -606,7 +674,8 @@ export default function JapanGastroTour() {
               </a>
             </div>
             <p className="mt-3 text-xs text-gray-500">
-              By sending, you agree to be contacted about availability. Dates shown: {dateRange}.
+              By sending, you agree to be contacted about availability. Dates
+              shown: {dateRange}.
             </p>
           </form>
 
@@ -620,17 +689,21 @@ export default function JapanGastroTour() {
             </div>
             <div className="mt-4 grid gap-3 text-sm">
               <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-emerald-700" /> {dateRange}
+                <CalendarDays className="h-4 w-4 text-emerald-700" />{" "}
+                {dateRange}
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-emerald-700" /> Tokyo · Kyoto · Osaka · Hakone · Tokyo
+                <MapPin className="h-4 w-4 text-emerald-700" /> Tokyo · Kyoto ·
+                Osaka · Hakone · Tokyo
               </div>
               <div className="flex items-center gap-2">
-                <Coffee className="h-4 w-4 text-emerald-700" /> Daily breakfast + key tastings
+                <Coffee className="h-4 w-4 text-emerald-700" /> Daily breakfast
+                + key tastings
               </div>
             </div>
             <div className="mt-4 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900 ring-1 ring-emerald-200">
-              Early April is peak sakura in many areas. Pack layers and good walking shoes. Some tastings are outdoors.
+              Early April is peak sakura in many areas. Pack layers and good
+              walking shoes. Some tastings are outdoors.
             </div>
           </aside>
         </div>
@@ -639,7 +712,9 @@ export default function JapanGastroTour() {
       {/* Footer */}
       <footer className="border-t border-gray-200 bg-white py-10 text-sm dark:border-gray-800 dark:bg-gray-950">
         <Container className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-gray-600 dark:text-gray-300">© {new Date().getFullYear()} Gastro Journeys. All rights reserved.</p>
+          <p className="text-gray-600 dark:text-gray-300">
+            © {new Date().getFullYear()} Gastro Journeys. All rights reserved.
+          </p>
           <div className="flex items-center gap-4">
             <a href="#highlights" className="hover:text-emerald-700">
               Highlights

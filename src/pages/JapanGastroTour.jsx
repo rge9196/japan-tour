@@ -11,6 +11,7 @@ import {
   Info,
   Mail,
   Phone,
+  MessageCircle,
   Users,
   CheckCircle2,
   ChefHat,
@@ -667,10 +668,21 @@ export default function JapanGastroTour() {
                 <Mail className="h-4 w-4" /> Send Inquiry
               </button>
               <a
-                href="tel:+521234567890"
-                className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 font-semibold text-gray-900 ring-1 ring-inset ring-gray-200 transition hover:bg-gray-50 dark:bg-gray-900 dark:text-white dark:ring-gray-700"
+                href="https://wa.me/521234567890"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-2xl bg-green-500 px-5 py-3 font-semibold text-white ring-1 ring-inset ring-green-600 transition hover:bg-green-600 dark:bg-green-600 dark:ring-green-700"
               >
-                <Phone className="h-4 w-4" /> Call Us
+                {/* WhatsApp SVG */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4"
+                >
+                  <path d="M20.52 3.48A11.89 11.89 0 0 0 12 0C5.38 0 .02 5.37.02 12c0 2.11.55 4.15 1.6 5.95L0 24l6.22-1.62A11.93 11.93 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.19-1.24-6.19-3.48-8.52zM12 22a9.89 9.89 0 0 1-5.07-1.39l-.36-.22-3.68.96.98-3.58-.24-.37A9.9 9.9 0 0 1 2 12c0-5.51 4.49-10 10-10s10 4.49 10 10-4.49 10-10 10zm5.5-7.37c-.3-.15-1.77-.88-2.04-.98s-.47-.15-.67.15-.77.98-.95 1.18-.35.22-.65.07c-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37s-1.05 1.03-1.05 2.5 1.07 2.89 1.22 3.09c.15.2 2.11 3.22 5.11 4.51.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.08-.12-.27-.2-.57-.35z" />
+                </svg>
+                WhatsApp
               </a>
             </div>
             <p className="mt-3 text-xs text-gray-500">

@@ -4,15 +4,11 @@ import {
   CalendarDays,
   MapPin,
   UtensilsCrossed,
-  Train,
-  Leaf,
-  Wine,
   Coffee,
   Info,
   Mail,
   Users,
   CheckCircle2,
-  ChefHat,
   FileDown,
   Printer,
   Clock,
@@ -23,10 +19,25 @@ import { Section } from "@/components/ui/Section";
 import { Badge } from "@/components/ui/Badge";
 import { Pill } from "@/components/ui/Pill";
 
-import { itinerary, highlights, inclusions, exclusions, faq } from "@/features/japan-gastro/data";
-import { TOUR_START, TOUR_DAYS, TOUR_END, CONTACT_WHATSAPP } from "@/features/japan-gastro/constants";
+import {
+  itinerary,
+  highlights,
+  inclusions,
+  exclusions,
+  faq,
+  DIET_OPTIONS,
+} from "@/features/japan-gastro/data";
+import {
+  TOUR_START,
+  TOUR_DAYS,
+  TOUR_END,
+  CONTACT_WHATSAPP,
+} from "@/features/japan-gastro/constants";
 import { formatDate, downloadJSON, mailto } from "@/features/japan-gastro/utils";
-
+import { HighlightCard } from "@/features/japan-gastro/HighlightCard";
+import { DayCard } from "@/features/japan-gastro/DayCard";
+import "@/features/japan-gastro/hero.css";
+import "@/features/japan-gastro/print.css";
 
 export default function JapanGastroTour() {
   const [size, setSize] = useState(2);
@@ -36,6 +47,18 @@ export default function JapanGastroTour() {
     () => `${formatDate(TOUR_START)} – ${formatDate(TOUR_END)}`,
     []
   );
+
+  // Precompute dates once for all itinerary items
+  const daysWithDates = useMemo(() => {
+    const base = new Date(TOUR_START);
+    return itinerary.map((d) => {
+      const date = new Date(base);
+      date.setDate(base.getDate() + (d.n - 1));
+      return { ...d, date };
+    });
+  }, []);
+
+  const year = useMemo(() => new Date().getFullYear(), []);
 
   const toggleDiet = (val) =>
     setDiet((d) => (d.includes(val) ? d.filter((x) => x !== val) : [...d, val]));
@@ -64,9 +87,9 @@ export default function JapanGastroTour() {
         <Container className="flex h-16 items-center justify-between">
           <a href="#top" className="flex items-center gap-2 font-bold">
             <UtensilsCrossed className="h-5 w-5 text-emerald-600" />
-            <span>Gastro Japan 11‑Day</span>
+            <span>Gastro Japan 11-Day</span>
           </a>
-          <nav className="hidden gap-6 sm:flex">
+          <nav className="hidden gap-6 sm:flex" aria-label="Primary">
             <a href="#highlights" className="text-sm font-medium hover:text-emerald-700">
               Highlights
             </a>
@@ -87,14 +110,7 @@ export default function JapanGastroTour() {
       </header>
 
       {/* Hero */}
-      <section
-        id="top"
-        className="relative isolate overflow-hidden bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url(https://images.unsplash.com/photo-1549693578-d683be217e58?q=80&w=2000&auto=format&fit=crop)",
-        }}
-      >
+      <section id="top" className="relative isolate overflow-hidden hero-bg">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />
         <Container className="relative z-10">
           <div className="py-24 sm:py-32">
@@ -106,11 +122,11 @@ export default function JapanGastroTour() {
             >
               <Badge icon={CalendarDays}>{dateRange}</Badge>
               <h1 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                11‑Day Japan Gastronomy Tour
+                11-Day Japan Gastronomy Tour
               </h1>
               <p className="mt-4 text-lg leading-8 text-white/90">
-                Spring cherry blossoms frame a food‑first route through Tokyo,
-                Kyoto, Osaka, and Hakone—from Michelin‑starred dining to iconic
+                Spring cherry blossoms frame a food-first route through Tokyo,
+                Kyoto, Osaka, and Hakone—from Michelin-starred dining to iconic
                 street markets.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
@@ -149,28 +165,18 @@ export default function JapanGastroTour() {
         id="highlights"
         eyebrow="Why you'll love it"
         title="Designed around cherry blossoms and bold flavors"
-        subtitle="Early April brings peak sakura and seasonal menus. This route balances two Michelin‑starred experiences with market crawls and free time."
+        subtitle="Early April brings peak sakura and seasonal menus. This route balances two Michelin-starred experiences with market crawls and free time."
       >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {highlights.map((h, i) => {
-            const Icon = h.icon;
-            return (
-              <motion.div
-                key={h.title}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
-                className="group rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-gray-800 dark:bg-gray-950"
-              >
-                <div className="mb-3 inline-flex rounded-xl bg-emerald-50 p-3 text-emerald-700 ring-1 ring-emerald-100">
-                  <Icon className="h-6 w-6" aria-hidden />
-                </div>
-                <h3 className="text-lg font-semibold">{h.title}</h3>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{h.text}</p>
-              </motion.div>
-            );
-          })}
+          {highlights.map((h, i) => (
+            <HighlightCard
+              key={h.title}
+              Icon={h.icon}
+              title={h.title}
+              text={h.text}
+              delay={i * 0.05}
+            />
+          ))}
         </div>
       </Section>
 
@@ -178,51 +184,13 @@ export default function JapanGastroTour() {
       <Section
         id="itinerary"
         eyebrow="Day by day"
-        title="Your 11‑day route"
+        title="Your 11-day route"
         subtitle="Tokyo → Kyoto → Osaka → Hakone → Tokyo, with minimal travel time and maximum eating time."
       >
         <div className="space-y-6">
-          {itinerary.map((d) => {
-            const date = new Date(TOUR_START);
-            date.setDate(TOUR_START.getDate() + (d.n - 1));
-            return (
-              <motion.article
-                key={d.n}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.45 }}
-                className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-950"
-              >
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <img
-                    src={d.imageUrl}
-                    alt={`${d.city} — ${d.title}`}
-                    loading="lazy"
-                    className="w-full sm:w-32 sm:h-32 rounded-lg border border-gray-200 object-cover dark:border-gray-700"
-                  />
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-center gap-3">
-                        <Pill>Day {d.n}</Pill>
-                        <Badge icon={CalendarDays}>{formatDate(date)}</Badge>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                        <MapPin className="h-4 w-4" /> {d.city}
-                      </div>
-                    </div>
-
-                    <h3 className="mt-3 text-xl font-semibold">{d.title}</h3>
-                    <p className="mt-2 text-gray-700 dark:text-gray-200">{d.blurb}</p>
-                    <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
-                      <Badge icon={UtensilsCrossed}>Meals: {d.meals}</Badge>
-                    </div>
-                  </div>
-                </div>
-              </motion.article>
-            );
-          })}
+          {daysWithDates.map((d) => (
+            <DayCard key={d.n} d={d} />
+          ))}
         </div>
       </Section>
 
@@ -274,7 +242,7 @@ export default function JapanGastroTour() {
               key={f.q}
               className="group rounded-2xl border border-gray-200 bg-white p-5 open:shadow-sm dark:border-gray-800 dark:bg-gray-950"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-xl">
                 <h3 className="text-base font-semibold">{f.q}</h3>
                 <Clock className="h-4 w-4 text-gray-500 transition group-open:rotate-90" />
               </summary>
@@ -302,6 +270,7 @@ export default function JapanGastroTour() {
                 <input
                   required
                   name="name"
+                  autoComplete="name"
                   className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm outline-none ring-emerald-200 focus:ring-2 dark:border-gray-700 dark:bg-gray-900"
                   placeholder="e.g., Il Rabineee"
                 />
@@ -312,6 +281,7 @@ export default function JapanGastroTour() {
                   required
                   name="email"
                   type="email"
+                  autoComplete="email"
                   className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm outline-none ring-emerald-200 focus:ring-2 dark:border-gray-700 dark:bg-gray-900"
                   placeholder="you@example.com"
                 />
@@ -320,6 +290,9 @@ export default function JapanGastroTour() {
                 <span className="text-sm font-medium">Phone / WhatsApp</span>
                 <input
                   name="phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
                   className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm outline-none ring-emerald-200 focus:ring-2 dark:border-gray-700 dark:bg-gray-900"
                   placeholder="+52 …"
                 />
@@ -342,7 +315,7 @@ export default function JapanGastroTour() {
               <fieldset className="sm:col-span-2">
                 <legend className="mb-2 text-sm font-medium">Dietary preferences</legend>
                 <div className="flex flex-wrap gap-2">
-                  {["Vegetarian", "Pescatarian", "No pork", "No shellfish", "Gluten‑free"].map((dopt) => (
+                  {DIET_OPTIONS.map((dopt) => (
                     <label
                       key={dopt}
                       className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1 text-sm transition ${
@@ -368,7 +341,7 @@ export default function JapanGastroTour() {
                   name="notes"
                   rows={4}
                   className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm outline-none ring-emerald-200 focus:ring-2 dark:border-gray-700 dark:bg-gray-900"
-                  placeholder="Tell us about anniversaries, must‑eat dishes, mobility, or flight ideas."
+                  placeholder="Tell us about anniversaries, must-eat dishes, mobility, or flight ideas."
                 />
               </label>
             </div>
@@ -386,6 +359,7 @@ export default function JapanGastroTour() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-2xl bg-green-500 px-5 py-3 font-semibold text-white ring-1 ring-inset ring-green-600 transition hover:bg-green-600 dark:bg-green-600 dark:ring-green-700"
               >
+                {/* WhatsApp icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -407,7 +381,7 @@ export default function JapanGastroTour() {
             <div className="flex flex-wrap gap-2">
               <Pill>{TOUR_DAYS} days</Pill>
               <Pill>4 destinations</Pill>
-              <Pill>Food‑first pacing</Pill>
+              <Pill>Food-first pacing</Pill>
               <Pill>Small groups</Pill>
             </div>
             <div className="mt-4 grid gap-3 text-sm">
@@ -432,24 +406,21 @@ export default function JapanGastroTour() {
       <footer className="border-t border-gray-200 bg-white py-10 text-sm dark:border-gray-800 dark:bg-gray-950">
         <Container className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-gray-600 dark:text-gray-300">
-            © {new Date().getFullYear()} Gastro Journeys. All rights reserved.
+            © {year} Gastro Journeys. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <a href="#highlights" className="hover:text-emerald-700">Highlights</a>
-            <a href="#itinerary" className="hover:text-emerald-700">Itinerary</a>
-            <a href="#book" className="hover:text-emerald-700">Reserve</a>
+            <a href="#highlights" className="hover:text-emerald-700">
+              Highlights
+            </a>
+            <a href="#itinerary" className="hover:text-emerald-700">
+              Itinerary
+            </a>
+            <a href="#book" className="hover:text-emerald-700">
+              Reserve
+            </a>
           </div>
         </Container>
       </footer>
-
-      {/* Print styles */}
-      <style>{`
-        @media print {
-          header, .no-print { display: none !important; }
-          section { page-break-inside: avoid; }
-          body { color: #111; }
-        }
-      `}</style>
     </main>
   );
 }

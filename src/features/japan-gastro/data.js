@@ -179,3 +179,11 @@ export const faq = [
     a: "Yes — we blend must-try classics with local gems, plus free time to explore at your own pace.",
   },
 ];
+
+export const DIET_OPTIONS = [
+"Vegetarian",
+"Pescatarian",
+"No pork",
+"No shellfish",
+"Gluten‑free",
+];

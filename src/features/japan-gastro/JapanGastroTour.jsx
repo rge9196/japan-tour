@@ -18,24 +18,15 @@ import {
   Clock,
 } from "lucide-react";
 
-import { Container } from "../../components/ui/Container";
-import { Section } from "../../components/ui/Section";
-import { Badge } from "../../components/ui/Badge";
-import { Pill } from "../../components/ui/Pill";
+import { Container } from "@/components/ui/Container";
+import { Section } from "@/components/ui/Section";
+import { Badge } from "@/components/ui/Badge";
+import { Pill } from "@/components/ui/Pill";
 
-import { itinerary, highlights, inclusions, exclusions } from "./data";
-import { TOUR_START, TOUR_DAYS, TOUR_END } from "./constants";
-import { formatDate, downloadJSON, mailto } from "./utils";
+import { itinerary, highlights, inclusions, exclusions, faq } from "@/features/japan-gastro/data";
+import { TOUR_START, TOUR_DAYS, TOUR_END, CONTACT_WHATSAPP } from "@/features/japan-gastro/constants";
+import { formatDate, downloadJSON, mailto } from "@/features/japan-gastro/utils";
 
-// Map icon name strings from data.js to actual Lucide icons
-const ICON_MAP = {
-  UtensilsCrossed,
-  Train,
-  Leaf,
-  Wine,
-  ChefHat,
-  CalendarDays,
-};
 
 export default function JapanGastroTour() {
   const [size, setSize] = useState(2);
@@ -162,7 +153,7 @@ export default function JapanGastroTour() {
       >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {highlights.map((h, i) => {
-            const Icon = ICON_MAP[h.icon] || UtensilsCrossed;
+            const Icon = h.icon;
             return (
               <motion.div
                 key={h.title}
@@ -278,24 +269,7 @@ export default function JapanGastroTour() {
         subtitle="If you have other questions, just ask when you reserve."
       >
         <div className="grid gap-6 md:grid-cols-2">
-          {[
-            {
-              q: "How physical is the tour?",
-              a: "Expect 8,000–12,000 steps on market days with breaks. Most transfers are by rail with minimal luggage handling.",
-            },
-            {
-              q: "Can you handle dietary needs?",
-              a: "We accommodate pescatarian, vegetarian, and no‑pork requests with advance notice. Severe allergies require custom arrangements.",
-            },
-            {
-              q: "What are the exact hotels and restaurants?",
-              a: "Final list is shared ~30 days prior and may vary by date to reflect seasonal availability and quality.",
-            },
-            {
-              q: "Is this suitable for first‑time visitors?",
-              a: "Yes — we blend must‑try classics with local gems, plus free time to explore at your own pace.",
-            },
-          ].map((f) => (
+          {faq.map((f) => (
             <details
               key={f.q}
               className="group rounded-2xl border border-gray-200 bg-white p-5 open:shadow-sm dark:border-gray-800 dark:bg-gray-950"
@@ -407,7 +381,7 @@ export default function JapanGastroTour() {
                 <Mail className="h-4 w-4" /> Send Inquiry
               </button>
               <a
-                href="https://wa.me/521234567890"
+                href={`https://wa.me/${CONTACT_WHATSAPP}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-2xl bg-green-500 px-5 py-3 font-semibold text-white ring-1 ring-inset ring-green-600 transition hover:bg-green-600 dark:bg-green-600 dark:ring-green-700"

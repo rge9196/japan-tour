@@ -19,8 +19,9 @@ export const downloadJSON = (filename, data) => {
   URL.revokeObjectURL(url);
 };
 
+import { CONTACT_EMAIL } from "./constants";
 export const mailto = ({ name, email, phone, size, diet, notes, start, end }) => {
-  const to = "tours@yourcompany.com"; // ← change this to your inbox
+  const to = CONTACT_EMAIL; 
   const subject = encodeURIComponent(
     "Japan 11‑Day Gastronomy Tour — Booking Inquiry"
   );

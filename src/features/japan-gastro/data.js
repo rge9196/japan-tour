@@ -1,3 +1,14 @@
+import {
+  UtensilsCrossed,
+  Train,
+  Leaf,
+  Wine,
+  ChefHat,
+  CalendarDays,
+} from "lucide-react";
+
+
+
 // Helpers for constructing data items
 const day = (n, city, title, blurb, meals = "Breakfast", imageUrl = "") => ({
   n,
@@ -10,36 +21,37 @@ const day = (n, city, title, blurb, meals = "Breakfast", imageUrl = "") => ({
 
 export const highlights = [
   {
-    icon: "UtensilsCrossed",
+    icon: UtensilsCrossed,
     title: "11 days of flavors",
     text: "From Michelin-star kaiseki & sushi to iconic markets and street eats—paced for maximum taste.",
   },
   {
-    icon: "Train",
+    icon: Train,
     title: "Smooth rail links",
     text: "Shinkansen and limited express rides with reserved seats and seamless transfers.",
   },
   {
-    icon: "Leaf",
+    icon: Leaf,
     title: "Spring & blossoms",
     text: "Early April timing to catch cherry blossoms alongside seasonal menus.",
   },
   {
-    icon: "Wine",
+    icon: Wine,
     title: "Pairings & tastings",
     text: "Curated sake flights, regional brews, and optional tea pairings.",
   },
   {
-    icon: "ChefHat",
+    icon: ChefHat,
     title: "Two Michelin moments",
     text: "Tokyo omakase counter and Kyoto ryōtei kaiseki—both Michelin-recognized.",
   },
   {
-    icon: "CalendarDays",
+    icon: CalendarDays,
     title: "Balanced schedule",
     text: "Guided headline meals plus free time to follow your appetite.",
   },
 ];
+
 
 export const inclusions = [
   "10 nights hand‑picked stays (boutique hotels/ryokan mix)",
@@ -147,4 +159,23 @@ export const itinerary = [
     "Breakfast",
     "https://tse3.mm.bing.net/th/id/OIP.DkBX9g31Gl4qQZBH-x1R9wHaEL?pid=Api"
   ),
+];
+
+export const faq = [
+  {
+    q: "How physical is the tour?",
+    a: "Expect 8,000–12,000 steps on market days with breaks. Most transfers are by rail with minimal luggage handling.",
+  },
+  {
+    q: "Can you handle dietary needs?",
+    a: "We accommodate pescatarian, vegetarian, and no-pork requests with advance notice. Severe allergies require custom arrangements.",
+  },
+  {
+    q: "What are the exact hotels and restaurants?",
+    a: "Final list is shared ~30 days prior and may vary by date to reflect seasonal availability and quality.",
+  },
+  {
+    q: "Is this suitable for first-time visitors?",
+    a: "Yes — we blend must-try classics with local gems, plus free time to explore at your own pace.",
+  },
 ];
